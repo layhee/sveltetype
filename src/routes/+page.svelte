@@ -84,7 +84,6 @@
 	}
 	function setLetter() {
 		const isWordCompleted = letterIndex > words[wordIndex].length - 1;
-		console.dir(wordsEl.children[wordIndex]);
 
 		if (!isWordCompleted) {
 			letterEl = wordsEl.children[wordIndex].children[
@@ -154,7 +153,7 @@
 			startGame();
 		}
 	}
-	onMount(() => {
+	onMount(async () => {
 		focusInput();
 	});
 </script>
@@ -235,7 +234,7 @@
 			align-items: center;
 			top: -162px;
 			font-size: 3.4rem;
-			line-height: 4rem;
+			line-height: 4.4rem;
 			color: var(--primary);
 			opacity: 0;
 			transition: all 0.3s ease;
@@ -268,18 +267,18 @@
 		flex-wrap: wrap;
 		gap: 0.4em;
 		position: relative;
-		font-size: 1.5rem;
+		font-size: 2rem;
 		line-height: var(--line-height);
 		overflow: hidden;
 		user-select: none;
 	}
 	.cursor {
 		position: absolute;
-		height: 1.8rem;
+		height: 2.4rem;
 		top: 0;
 		border-right: 1px solid #fff;
-		animation: cursor 1s infinite;
-		transition: all 0.2s ease;
+		animation: cursor 800ms infinite;
+		transition: all 140ms ease;
 
 		@keyframes cursor {
 			0%,
