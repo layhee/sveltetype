@@ -1,10 +1,10 @@
 .letter {
-    opacity: 0.4;
+    opacity: 0.6;
     transition: all 160ms ease;
 
     &[data-letter='correct'] {
         opacity: 0.8;
-        color: rgb(52, 217, 247);
+        color: rgb(131, 236, 74);
     }
 
     &[data-letter='incorrect'] {

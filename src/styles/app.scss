@@ -10,10 +10,10 @@
 }
 
 :root {
-  --primary: tomato;
+  --primary: rgb(249, 108, 76);
   --fg-100: hsl(220 20% 98%);
   --fg-200: hsl(220 20% 80%);
-  --bg-100: hsl(220 20% 14%);
+  --bg-100: hsl(195, 6%, 13%);
 }
 
 html,
@@ -33,7 +33,7 @@ button {
   color: inherit;
   background: none;
   border: none;
-  opacity: 0.4;
+  opacity: 0.8;
   transition: all 0.3s ease;
 
   &:hover {

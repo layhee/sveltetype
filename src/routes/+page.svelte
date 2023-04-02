@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { tweened } from 'svelte/motion';
 	import { blur } from 'svelte/transition';
 	type Game = 'waiting for input' | 'in progress' | 'game over';
@@ -6,7 +7,7 @@
 
 	let game: Game = 'waiting for input';
 	let typedLetter = '';
-	let seconds = 6;
+	let seconds = 30;
 
 	let words: Word[] =
 		'The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog'.split(
@@ -25,6 +26,7 @@
 
 	function resetGame() {
 		toggleReset = !toggleReset;
+		typedLetter = '';
 		seconds = 30;
 		wordIndex = 0;
 		letterIndex = 0;
@@ -138,6 +140,9 @@
 		cursorEl.style.top = `${offsetTop + offset}px`;
 		cursorEl.style.left = `${offsetLeft + offsetWidth}px`;
 	}
+	function focusInput() {
+		inputEl.focus();
+	}
 	function handleKeydown(event: KeyboardEvent) {
 		if (event.code === 'Space') {
 			event.preventDefault();
@@ -149,6 +154,9 @@
 			startGame();
 		}
 	}
+	onMount(() => {
+		focusInput();
+	});
 </script>
 
 {#if game !== 'game over'}
@@ -167,27 +175,33 @@
 		<div class="time">
 			{seconds}
 		</div>
-		<div
-			bind:this={wordsEl}
-			class="words"
-		>
-			{#each words as word}
-				<span class="word">
-					{#each word as letter}
-						<span class="letter">{letter}</span>
-					{/each}
-				</span>
-			{/each}
+		{#key toggleReset}
 			<div
-				bind:this={cursorEl}
-				class="cursor"
-			/>
-		</div>
+				in:blur|local
+				bind:this={wordsEl}
+				class="words"
+			>
+				{#each words as word}
+					<span class="word">
+						{#each word as letter}
+							<span class="letter">{letter}</span>
+						{/each}
+					</span>
+				{/each}
+				<div
+					bind:this={cursorEl}
+					class="cursor"
+				/>
+			</div>
+		{/key}
 	</div>
 {/if}
 
 {#if game === 'game over'}
-	<div class="results">
+	<div
+		in:blur
+		class="results"
+	>
 		<div>
 			<p class="title">Words/Minute:</p>
 			<p class="score">{Math.trunc($wordsPerMin)}</p>
@@ -196,25 +210,53 @@
 			<p class="title">Accuracy</p>
 			<p class="score">{Math.trunc($accuracy)}%</p>
 		</div>
+		<div class="reset">
+			<button
+				on:click={resetGame}
+				aria-label="reset"
+			>
+				<p class="again">Try Again</p>
+			</button>
+		</div>
 	</div>
 {/if}
 
 <style lang="scss">
 	.game {
 		position: relative;
-
+		.input {
+			position: absolute;
+			opacity: 0;
+		}
 		.time {
 			position: absolute;
-			top: -118px;
-			font-size: 3rem;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			top: -162px;
+			font-size: 3.4rem;
+			line-height: 4rem;
 			color: var(--primary);
 			opacity: 0;
 			transition: all 0.3s ease;
+			background-color: #6cf;
+			height: 126px;
+			width: 126px;
+			border-radius: 50%;
+			font-family: 'loos-extended', serif;
+			font-weight: 700;
+			color: #fff;
 		}
 
 		&[data-game='in progress'] .time {
 			opacity: 1;
 		}
+	}
+	.reset {
+		width: 100%;
+		display: grid;
+		justify-content: center;
+		margin-top: 4rem;
 	}
 	.words {
 		--line-height: 1em;
@@ -268,7 +310,11 @@
 			font-family: 'loos-extended';
 			font-weight: 700;
 		}
-
+		.again {
+			font-size: 2rem;
+			color: #fc6;
+			margin-top: 1.8rem;
+		}
 		.play {
 			margin-top: 1rem;
 		}
