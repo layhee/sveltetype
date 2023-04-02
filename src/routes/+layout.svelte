@@ -4,12 +4,12 @@
 </script>
 
 <svelte:head>
-	<title>TypeTester</title>
+	<title>Sesquipedalian TypeTester</title>
 </svelte:head>
 
 <div class="layout">
 	<nav>
-		<h1>Typer</h1>
+		<h1>Tough Typer</h1>
 	</nav>
 
 	<main>
@@ -20,7 +20,7 @@
 <style lang="scss">
 	h1 {
 		font-family: 'loos-extended', sans-serif;
-		font-size: 1.8rem;
+		font-size: 3rem;
 		color: var(--fg-200);
 		letter-spacing: 2px;
 	}

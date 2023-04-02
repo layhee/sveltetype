@@ -9,10 +9,8 @@
 	let typedLetter = '';
 	let seconds = 30;
 
-	let words: Word[] =
-		'The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog'.split(
-			' '
-		);
+	let words: Word[] = [];
+
 	let wordIndex = 0;
 	let letterIndex = 0;
 	let correctLetters = 0;
@@ -33,6 +31,7 @@
 		correctLetters = 0;
 		$wordsPerMin = 0;
 		$accuracy = 0;
+		getWords(100);
 		setGameState('waiting for input');
 	}
 	function getWordsPerMin() {
@@ -153,7 +152,13 @@
 			startGame();
 		}
 	}
+	async function getWords(limit: number) {
+		const response = await fetch(`/api/words?limit=${limit}`);
+		words = await response.json();
+	}
+
 	onMount(async () => {
+		getWords(100);
 		focusInput();
 	});
 </script>
@@ -170,6 +175,7 @@
 			on:keydown={handleKeydown}
 			class="input"
 			type="text"
+			autofocus
 		/>
 		<div class="time">
 			{seconds}
@@ -193,6 +199,14 @@
 				/>
 			</div>
 		{/key}
+		<div class="reset">
+			<button
+				on:click={resetGame}
+				aria-label="reset"
+			>
+				<p class="again">New Words.</p>
+			</button>
+		</div>
 	</div>
 {/if}
 
