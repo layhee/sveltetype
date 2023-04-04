@@ -2,25 +2,28 @@
 	import { onMount } from 'svelte';
 	import { tweened } from 'svelte/motion';
 	import { blur } from 'svelte/transition';
+
+	//declare types
 	type Game = 'waiting for input' | 'in progress' | 'game over';
 	type Word = string;
 
+	//declare variables
 	let game: Game = 'waiting for input';
 	let typedLetter = '';
 	let seconds = 30;
-
 	let words: Word[] = [];
-
 	let wordIndex = 0;
 	let letterIndex = 0;
 	let correctLetters = 0;
 	let toggleReset = false;
-	let wordsPerMin = tweened(0, { delay: 300, duration: 1000 });
-	let accuracy = tweened(0, { delay: 1300, duration: 1000 });
 	let wordsEl: HTMLDivElement;
 	let letterEl: HTMLSpanElement;
 	let inputEl: HTMLInputElement;
 	let cursorEl: HTMLDivElement;
+
+	//results animation
+	let wordsPerMin = tweened(0, { delay: 300, duration: 1000 });
+	let accuracy = tweened(0, { delay: 1300, duration: 1000 });
 
 	function resetGame() {
 		toggleReset = !toggleReset;
@@ -31,7 +34,7 @@
 		correctLetters = 0;
 		$wordsPerMin = 0;
 		$accuracy = 0;
-		getWords(100);
+		getWords(20);
 		setGameState('waiting for input');
 	}
 	function getWordsPerMin() {
@@ -204,7 +207,7 @@
 				on:click={resetGame}
 				aria-label="reset"
 			>
-				<p class="again">New Words.</p>
+				<p>New Words.</p>
 			</button>
 		</div>
 	</div>
@@ -240,6 +243,8 @@
 		.input {
 			position: absolute;
 			opacity: 0;
+			width: 75%;
+			height: 120px;
 		}
 		.time {
 			position: absolute;
@@ -253,6 +258,7 @@
 			opacity: 0;
 			transition: all 0.3s ease;
 			background-color: #6cf;
+			text-shadow: 3px 3px 2px #000;
 			height: 126px;
 			width: 126px;
 			border-radius: 50%;
@@ -311,7 +317,6 @@
 		.title {
 			font-size: 2rem;
 			color: var(--fg-200);
-			margin-top: 1.8rem;
 		}
 
 		.score {
@@ -322,11 +327,6 @@
 			color: #6cf;
 			font-family: 'loos-extended';
 			font-weight: 700;
-		}
-		.again {
-			font-size: 2rem;
-			color: #fc6;
-			margin-top: 1.8rem;
 		}
 		.play {
 			margin-top: 1rem;

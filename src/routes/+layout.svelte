@@ -9,7 +9,7 @@
 
 <div class="layout">
 	<nav>
-		<h1>Tough Typer</h1>
+		<h1>Sveltepedalian</h1>
 	</nav>
 
 	<main>
@@ -20,11 +20,17 @@
 <style lang="scss">
 	h1 {
 		font-family: 'loos-extended', sans-serif;
-		font-size: 3rem;
+		font-size: 1.2rem;
+		text-transform: uppercase;
 		color: var(--fg-200);
 		letter-spacing: 2px;
+		animation: test 30s infinite;
 	}
-
+	@keyframes test {
+		50% {
+			letter-spacing: 10px;
+		}
+	}
 	.layout {
 		height: 100%;
 		display: grid;
