@@ -24,11 +24,11 @@
 		text-transform: uppercase;
 		color: var(--fg-200);
 		letter-spacing: 2px;
-		animation: test 30s infinite;
+		animation: test 45s infinite;
 	}
 	@keyframes test {
 		50% {
-			letter-spacing: 10px;
+			letter-spacing: 20px;
 		}
 	}
 	.layout {

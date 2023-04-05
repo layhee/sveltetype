@@ -14,6 +14,7 @@
 	let words: Word[] = [];
 	let wordIndex = 0;
 	let letterIndex = 0;
+	let totalTypedLetters = 0;
 	let correctLetters = 0;
 	let toggleReset = false;
 	let wordsEl: HTMLDivElement;
@@ -31,33 +32,18 @@
 		seconds = 30;
 		wordIndex = 0;
 		letterIndex = 0;
+		totalTypedLetters = 0;
 		correctLetters = 0;
 		$wordsPerMin = 0;
 		$accuracy = 0;
-		getWords(20);
+		getWords(10);
 		setGameState('waiting for input');
-	}
-	function getWordsPerMin() {
-		const word = 5;
-		const minutes = 0.5;
-		return Math.floor(correctLetters / word / minutes);
-	}
-	function getAccuracy() {
-		const totalLetters = getTotalLetters(words);
-		return Math.floor((correctLetters / totalLetters) * 100);
-	}
-	function getTotalLetters(words: Word[]) {
-		return words.reduce((count, word) => count + word.length, 0);
-	}
-	function getResults() {
-		$wordsPerMin = getWordsPerMin();
-		$accuracy = getAccuracy();
+		focusInput();
 	}
 	function startGame() {
 		setGameState('in progress');
 		setGameTimer();
 	}
-
 	function setGameState(state: Game) {
 		game = state;
 	}
@@ -93,17 +79,18 @@
 			] as HTMLSpanElement;
 		}
 	}
-
 	function checkLetter() {
 		const currentLetter = words[wordIndex][letterIndex];
 
 		if (typedLetter === currentLetter) {
 			letterEl.dataset.letter = 'correct';
 			increaseScore();
+			increaseTypeCount();
 		}
 
 		if (typedLetter !== currentLetter) {
 			letterEl.dataset.letter = 'incorrect';
+			increaseTypeCount();
 		}
 	}
 	function increaseScore() {
@@ -111,6 +98,9 @@
 	}
 	function nextLetter() {
 		letterIndex += 1;
+	}
+	function increaseTypeCount() {
+		totalTypedLetters += 1;
 	}
 	function nextWord() {
 		const isNotFirstLetter = letterIndex !== 0;
@@ -155,18 +145,34 @@
 			startGame();
 		}
 	}
+	function getWordsPerMin() {
+		const word = 5;
+		const minutes = 0.5;
+		return Math.floor(correctLetters / word / minutes);
+	}
+	function getAccuracy() {
+		return Math.floor((correctLetters / totalTypedLetters) * 100);
+	}
 	async function getWords(limit: number) {
 		const response = await fetch(`/api/words?limit=${limit}`);
 		words = await response.json();
 	}
-
 	onMount(async () => {
-		getWords(100);
+		getWords(10);
 		focusInput();
 	});
+	function getResults() {
+		$wordsPerMin = getWordsPerMin();
+		$accuracy = getAccuracy();
+		console.log(correctLetters);
+		console.log(totalTypedLetters);
+	}
 </script>
 
 {#if game !== 'game over'}
+	<h2>
+		The game starts when you start typing. You'll have 30 seconds Good Luck!
+	</h2>
 	<div
 		class="game"
 		data-game={game}
@@ -178,7 +184,6 @@
 			on:keydown={handleKeydown}
 			class="input"
 			type="text"
-			autofocus
 		/>
 		<div class="time">
 			{seconds}
@@ -251,16 +256,17 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			top: -162px;
+			top: -222px;
 			font-size: 3.4rem;
 			line-height: 4.4rem;
 			color: var(--primary);
 			opacity: 0;
 			transition: all 0.3s ease;
-			background-color: #6cf;
-			text-shadow: 3px 3px 2px #000;
-			height: 126px;
-			width: 126px;
+			// background-color: #6cf;
+			// text-shadow: 3px 3px 2px #000;
+			// box-shadow: 3px 3px 3px #fff;
+			// height: 126px;
+			// width: 126px;
 			border-radius: 50%;
 			font-family: 'loos-extended', serif;
 			font-weight: 700;
@@ -271,6 +277,17 @@
 			opacity: 1;
 		}
 	}
+	h2 {
+		line-height: 2.2rem;
+		font-size: 1.4rem;
+		margin: 2rem auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: 'loos-wide', monospace;
+		font-weight: 500;
+		font-style: normal;
+	}
 	.reset {
 		width: 100%;
 		display: grid;
@@ -278,16 +295,16 @@
 		margin-top: 4rem;
 	}
 	.words {
-		--line-height: 1em;
+		--line-height: 0.9em;
 		--lines: 3;
 
 		width: 75%;
 		max-height: calc(var(--line-height) * var(--lines) * 1.42);
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.4em;
+		gap: 0.36em;
 		position: relative;
-		font-size: 2rem;
+		font-size: 2.4rem;
 		line-height: var(--line-height);
 		overflow: hidden;
 		user-select: none;
@@ -317,6 +334,7 @@
 		.title {
 			font-size: 2rem;
 			color: var(--fg-200);
+			margin-top: 1rem;
 		}
 
 		.score {
@@ -327,9 +345,6 @@
 			color: #6cf;
 			font-family: 'loos-extended';
 			font-weight: 700;
-		}
-		.play {
-			margin-top: 1rem;
 		}
 	}
 </style>

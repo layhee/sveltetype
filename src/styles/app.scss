@@ -27,19 +27,22 @@ body {
 
 button {
   font: inherit;
+  font-weight: 700;
   line-height: 1.2rem;
   font-size: 1.2rem;
-  color: var(--fg-100);
+  color: rgb(32, 43, 49);
   background: rgb(251, 188, 60);
   padding: 12px 18px;
-  border-radius: 18px 18px;
+  border-radius: 6px 6px;
   border: none;
   transition: all 0.3s ease;
+  text-transform: uppercase;
 
   &:hover {
     cursor: pointer;
-    color: var(--fg-100);
     background-color: rgb(247, 178, 40);
     opacity: 1;
+    border-radius: 18px 18px;
+    font-size: 1.1rem;
   }
 }
