@@ -295,8 +295,8 @@
 		margin-top: 4rem;
 	}
 	.words {
-		--line-height: 0.9em;
-		--lines: 3;
+		--line-height: 1.1em;
+		--lines: 2.8;
 
 		width: 75%;
 		max-height: calc(var(--line-height) * var(--lines) * 1.42);
